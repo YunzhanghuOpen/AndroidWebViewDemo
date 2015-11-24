@@ -10,7 +10,6 @@ import android.webkit.WebViewClient;
 
 /**
  * Created by max on 15/11/24.
- *
  */
 public class WebViewActivity extends Activity {
 
@@ -28,19 +27,18 @@ public class WebViewActivity extends Activity {
             }
         });
         mWebView = (WebView) findViewById(R.id.web_view);
+        //设置支持Dom存储
         mWebView.getSettings().setDomStorageEnabled(true);
+        //设置支持JavaScript
         mWebView.getSettings().setJavaScriptEnabled(true);
+        //清除WebView缓存
         mWebView.clearCache(true);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                //保证使用应用内的WebView打开 而不是使用外部浏览器 返回值为true
                 view.loadUrl(url);
                 return true;
-            }
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
             }
         });
         mWebView.loadUrl("https://test.yunzhanghu.com/#/app/logout");
