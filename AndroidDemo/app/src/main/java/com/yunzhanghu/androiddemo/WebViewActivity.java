@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -31,8 +32,8 @@ public class WebViewActivity extends Activity {
         mWebView.getSettings().setDomStorageEnabled(true);
         //设置支持JavaScript
         mWebView.getSettings().setJavaScriptEnabled(true);
-        //清除WebView缓存
-        mWebView.clearCache(true);
+        //设置WebView缓存模式
+        mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
