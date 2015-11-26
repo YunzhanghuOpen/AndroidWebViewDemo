@@ -4,12 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 public class JSActivity extends Activity {
@@ -26,16 +24,17 @@ public class JSActivity extends Activity {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setSupportZoom(false);
         //方法一 通过设置WebViewClient实现与JS交互
-        mWebView.setWebViewClient(new CustomWebViewClient() {
+        mWebView.setWebViewClient(new CustomWebViewClient(this) {
             @Override
             public void returnAuth(WebView view, String url) {
-                Log.d("JSActivity", parseQueryString(url));
-                Toast.makeText(JSActivity.this, "button is clicked", Toast.LENGTH_SHORT).show();
+                Log.d("JSActivity", "return Auth" + url);
+                //TODO 商户业务逻辑
+//                Toast.makeText(JSActivity.this, "button is clicked", Toast.LENGTH_SHORT).show();
             }
-
         });
-        mWebView.loadUrl("file:///android_asset/demo.html");
-        //方法二 通过添加JS接口实现与JS交互 
+//        mWebView.loadUrl("file:///android_asset/demo.html");
+        mWebView.loadUrl("http://10.10.1.116:8000/");
+        //方法二 通过添加JS接口实现与JS交互
         mWebView.addJavascriptInterface(new AndroidBridge(this), "AndroidBridge");
     }
 

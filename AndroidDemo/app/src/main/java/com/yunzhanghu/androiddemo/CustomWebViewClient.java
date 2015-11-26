@@ -1,100 +1,149 @@
 package com.yunzhanghu.androiddemo;
 
-import android.content.Context;
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.net.Uri;
+import android.os.Build;
+import android.text.TextUtils;
+import android.util.Log;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by max on 15/11/25.
  * 自定义WebViewClient
  */
 public class CustomWebViewClient extends WebViewClient {
-
-
-    public CustomWebViewClient() {
-    }
-
-    public CustomWebViewClient(Context context) {
-        mContext = context;
-    }
-
-    public CustomWebViewClient(Context context, boolean shouldOverrideUrlLoading) {
-        mContext = context;
-        mShouldOverrideUrlLoading = shouldOverrideUrlLoading;
-    }
     /**
-     * Give the host application a chance to take over the control when a new
-     * url is about to be loaded in the current WebView. If WebViewClient is not
-     * provided, by default WebView will ask Activity Manager to choose the
-     * proper handler for the url. If WebViewClient is provided, return true
-     * means the host application handles the url, while return false means the
-     * current WebView handles the url.
-     * This method is not called for requests using the POST "method".
+     * 构造方法
      *
-     * @param view The WebView that is initiating the callback.
-     * @param url The url to be loaded.
-     * @return True if the host application wants to leave the current WebView
-     *         and handle the url itself, otherwise return false.
+     * @param activity WebView所在的Activity实例
      */
+    public CustomWebViewClient(Activity activity) {
+        mActivity = activity;
+    }
+
+
+    /**
+     * Notify the host application of a resource request and allow the
+     * application to return the data.  If the return value is null, the WebView
+     * will continue to load the resource as usual.  Otherwise, the return
+     * response and data will be used.
+     * <p/>
+     * NOTE: This method is called on a thread other than the UI thread
+     * so clients should exercise caution
+     * when accessing private data or the view system.
+     *
+     * @param view The {@link android.webkit.WebView} that is requesting the
+     *             resource.
+     * @param url  The raw url of the resource.
+     * @return A {@link android.webkit.WebResourceResponse} containing the
+     * response information or null if the WebView should load the
+     * resource itself.
+     * @deprecated Use {@link #shouldInterceptRequest(WebView, WebResourceRequest)
+     * shouldInterceptRequest(WebView, WebResourceRequest)} instead.
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT) //API 19及以下会调用这个方法
     @Override
-    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        overrideUrlLoading(view, url);
-        String scheme = Uri.parse(url).getScheme();
-        if (scheme == null) {
-            throw new NullPointerException("scheme");
+    public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+        String url1 = "http://yunzhanghu.com/app/action?code=2&realname=zhangsan&cardno=341226198902121355&result=1";
+        Uri uri1 = Uri.parse(url1);
+        String code = uri1.getQueryParameter("code");
+
+        Log.d("hello", "url :" + uri1.toString() + "\n" + uri1.getPath() + "\n" + uri1.getQuery());
+        if (url.contains("app")) {
+            if (!TextUtils.isEmpty(code) && code.equals("2")) {
+                //强制关闭WebView所在页面
+                if (mActivity != null) {
+                    mActivity.finish();
+                    return null;
+                }
+            }
+            String exampleString = "true";
+            returnAuth(view, url);
+            return new WebResourceResponse("text/json", "utf-8", new ByteArrayInputStream(exampleString.getBytes(StandardCharsets.UTF_8)));
         }
-        if (scheme.equals(URI_SCHEME)) {
-            String host = Uri.parse(url).getHost();
-            if (host == null) {
-                throw new NullPointerException("host");
-            }
-            if (host.equals(RETURN_AUTH_ACTION)) {
-                returnAuth(view, url);
-            }
-            if (host.equals(RETURN_BANKCARD_ACTION)) {
-                returnBankcard(view, url);
-            }
-        }
-        return mShouldOverrideUrlLoading;
+        return null;
     }
 
     /**
-     * 通知应用程序WebView将要返回授权页面
+     * Notify the host application of a resource request and allow the
+     * application to return the data.  If the return value is null, the WebView
+     * will continue to load the resource as usual.  Otherwise, the return
+     * response and data will be used.
+     * <p/>
+     * NOTE: This method is called on a thread other than the UI thread
+     * so clients should exercise caution
+     * when accessing private data or the view system.
      *
-     * @param view 触发回调的WebView.
-     * @param url  WebView将要加载的url.
+     * @param view    The {@link android.webkit.WebView} that is requesting the
+     *                resource.
+     * @param request Object containing the details of the request.
+     * @return A {@link android.webkit.WebResourceResponse} containing the
+     * response information or null if the WebView should load the
+     * resource itself.
+     */
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP) //API 21及以上会调用该方法
+
+    @Override
+    public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+        Uri uri = request.getUrl();
+        Log.d("hello", "uri :" + uri.toString() + "\n" + uri.getPath() + "\n" + uri.getQuery());
+        String url = "http://yunzhanghu.com/app/action?code=0&realname=zhangsan&cardno=341226198902121355&result=1";
+        Uri uri1 = Uri.parse(url);
+        Log.d("hello", "url :" + uri1.toString() + "\n" + uri1.getPath() + "\n" + uri1.getAuthority() + "\n" + uri1.getHost() + "\n" + uri1.getQuery());
+        if (uri.getPath().equals("/app")) {
+            String exampleString = "ok";
+            returnAuth(view, request.getUrl().toString());
+            return new WebResourceResponse("text/json", "utf-8", new ByteArrayInputStream(exampleString.getBytes(StandardCharsets.UTF_8)));
+        }
+        return null;
+    }
+
+    /**
+     * 通知应用程序接收实名认证信息,可以通过解析url获取参数.
+     * <p/>
+     * 例如：String url = "http://yunzhanghu.com/app/action?code=0&realname=zhangsan&cardno=341226198902121355&result=1".
+     * Uri.parse(url).getQuery()将返回code=0&realname=zhangsan&cardno=341226198902121355&result=1.
+     * <p/>
+     * 注意：该方法是在子线程中调用的.
+     *
+     * @param view 请求资源的WebView.
+     * @param url  请求资源的原始url.
      */
     public void returnAuth(WebView view, String url) {
     }
 
     /**
-     * 通知应用程序WebView将要返回绑定银行卡页面
+     * 通知应用程序WebView将要返回绑定银行卡页面.
      *
-     * @param view 触发回调的WebView.
-     * @param url  WebView将要加载的url.
+     * @param view 请求资源的WebView.
+     * @param url  请求资源的原始url.
      */
     public void returnBankcard(WebView view, String url) {
     }
 
     /**
-     * 该方法用于在shouldOverrideUrlLoading方法中增加其他业务逻辑
+     * 通知应用程序WebView将要返回绑定银行卡页面.
      *
-     * @param view 触发回调的WebView.
-     * @param url  WebView将要加载的url.
+     * @param view 请求资源的WebView.
+     * @param url  请求资源的原始url.
      */
-    public void overrideUrlLoading(WebView view, String url) {
+    public void returnInvest(WebView view, String url) {
     }
 
-    private Context mContext;
+    private Activity mActivity;
 
-    private boolean mShouldOverrideUrlLoading = true;
 
     public final static String RETURN_AUTH_ACTION = "returnAuth";
 
     public final static String RETURN_BANKCARD_ACTION = "returnBankcard";
 
     public final static String URI_SCHEME = "yzh";
-
 
 }
