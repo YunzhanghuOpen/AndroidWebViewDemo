@@ -1,29 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
     >
 
     <Button
         android:id="@+id/btn_enter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="@android:color/holo_blue_dark"
-        android:text="进入云账户"
-        android:textColor="@android:color/white"
+        style="@style/ButtonStyle"
+        android:text="@string/str_enter_yzh"
         />
 
     <Button
         android:id="@+id/btn_js"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_enter"
-        android:layout_centerInParent="true"
-        android:background="@android:color/holo_blue_dark"
-        android:text="与JS交互"
-        android:textColor="@android:color/white"
+        style="@style/ButtonStyle"
+        android:text="@string/str_interact_js"
         />
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/btn_auth"
+        style="@style/ButtonStyle"
+        android:text="@string/str_enter_auth"
+        />
+
+    <Button
+        android:id="@+id/btn_invest"
+        style="@style/ButtonStyle"
+        android:text="@string/str_enter_invest"
+        />
+
+</LinearLayout>

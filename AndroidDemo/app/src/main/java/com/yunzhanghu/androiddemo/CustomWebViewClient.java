@@ -64,9 +64,9 @@ public class CustomWebViewClient extends WebViewClient {
                     return null;
                 }
             }
-            String exampleString = "true";
+            String responseStr = "true";
             returnAuth(view, url);
-            return new WebResourceResponse("text/json", "utf-8", new ByteArrayInputStream(exampleString.getBytes(StandardCharsets.UTF_8)));
+            return new WebResourceResponse("text/json", "utf-8", new ByteArrayInputStream(responseStr.getBytes(StandardCharsets.UTF_8)));
         }
         return null;
     }
@@ -98,9 +98,9 @@ public class CustomWebViewClient extends WebViewClient {
         Uri uri1 = Uri.parse(url);
         Log.d("hello", "url :" + uri1.toString() + "\n" + uri1.getPath() + "\n" + uri1.getAuthority() + "\n" + uri1.getHost() + "\n" + uri1.getQuery());
         if (uri.getPath().equals("/app")) {
-            String exampleString = "ok";
+            String responseStr = "ok";
             returnAuth(view, request.getUrl().toString());
-            return new WebResourceResponse("text/json", "utf-8", new ByteArrayInputStream(exampleString.getBytes(StandardCharsets.UTF_8)));
+            return new WebResourceResponse("text/json", "utf-8", new ByteArrayInputStream(responseStr.getBytes(StandardCharsets.UTF_8)));
         }
         return null;
     }
@@ -109,6 +109,7 @@ public class CustomWebViewClient extends WebViewClient {
      * 通知应用程序接收实名认证信息,可以通过解析url获取参数.
      * <p/>
      * 例如：String url = "http://yunzhanghu.com/app/action?code=0&realname=zhangsan&cardno=341226198902121355&result=1".
+     *
      * Uri.parse(url).getQuery()将返回code=0&realname=zhangsan&cardno=341226198902121355&result=1.
      * <p/>
      * 注意：该方法是在子线程中调用的.
