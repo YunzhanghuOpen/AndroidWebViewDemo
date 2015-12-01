@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+
 public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +22,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_enter:
-                startActivity(new Intent(this, WebViewActivity.class));
+                startActivity(new Intent(this, YZHActivity.class));
                 break;
             case R.id.btn_js:
                 startActivity(new Intent(this, JSActivity.class));

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AndroidDemo</string>
+    <string name="str_enter_yzh">用户自主进入云账户</string>
+    <string name="str_interact_js">WebView与JS交互</string>
+    <string name="str_enter_auth">进入云账户实名认证</string>
+    <string name="str_enter_invest">进入云账户绑卡</string>
+</resources>

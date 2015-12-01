@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">AndroidDemo</string>
-    <string name="str_enter_yzh">进入云账户演示</string>
-    <string name="str_interact_js">与JS交互技术实现方案演示</string>
-    <string name="str_enter_auth">实名认证流程演示</string>
-    <string name="str_enter_invest">投资流程演示</string>
-</resources>

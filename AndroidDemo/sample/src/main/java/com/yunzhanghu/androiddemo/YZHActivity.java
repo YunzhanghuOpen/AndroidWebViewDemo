@@ -2,17 +2,17 @@ package com.yunzhanghu.androiddemo;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+
 /**
  * Created by max on 15/11/24.
  */
-public class WebViewActivity extends Activity {
+public class YZHActivity extends Activity {
 
     private WebView mWebView;
 
@@ -20,14 +20,14 @@ public class WebViewActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_webview);
+        setContentView(R.layout.activity_yzh);
         findViewById(R.id.btn_closed).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        mWebView = (WebView) findViewById(R.id.web_view);
+        mWebView = (WebView) findViewById(R.id.yzh_web_view);
         //设置支持Dom存储
         mWebView.getSettings().setDomStorageEnabled(true);
         //设置支持JavaScript
@@ -42,7 +42,7 @@ public class WebViewActivity extends Activity {
                 return true;
             }
         });
-        mWebView.loadUrl("https://test.yunzhanghu.com/#/app/logout");
+        mWebView.loadUrl(Constant.YZH_TEST_URL);
     }
 
     @Override
