@@ -3,6 +3,7 @@ package com.yunzhanghu.library;
 import android.annotation.TargetApi;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
@@ -42,7 +43,8 @@ public class YZHWebViewClient extends WebViewClient {
     @Override
     public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
         //通过识别自定义的协议来截获请求
-        if (url.contains("/app")) {
+        Log.d(LOG_TAG, url);
+        if (url.contains("/returnAuth")) {
             Uri uri = Uri.parse(PARSE_PARAMS_TEST_URL);
             returnAuth(view, parseParams(uri));
             return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(RESPONSE_MSG.getBytes(StandardCharsets.UTF_8)));
@@ -73,9 +75,9 @@ public class YZHWebViewClient extends WebViewClient {
     public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
         Uri uri = request.getUrl();
         //通过识别自定义的协议来截获请求
-        if (uri.getPath().equals("/app")) {
-            Uri uri1 = Uri.parse(PARSE_PARAMS_TEST_URL);
-            returnAuth(view, parseParams(uri1));
+        if (uri.getPath().equals("/returnAuth")) {
+            Log.d(LOG_TAG, uri.getPath());
+            returnAuth(view, parseParams(uri));
             return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(RESPONSE_MSG.getBytes(StandardCharsets.UTF_8)));
         }
         return null;
@@ -90,15 +92,15 @@ public class YZHWebViewClient extends WebViewClient {
     private RequestParams parseParams(Uri uri) {
         //TODO 待TEST_URL中data修改为JSON格式后使用JSON解析
         RequestParams requestParams = new RequestParams();
-        String code = uri.getQueryParameter("code");
-        String result = uri.getQueryParameter("result");
-        String realName = uri.getQueryParameter("realname");
-        String cardno = uri.getQueryParameter("cardno");
+//        String code = uri.getQueryParameter("code");
+//        String result = uri.getQueryParameter("result");
+//        String realName = uri.getQueryParameter("realname");
+//        String cardno = uri.getQueryParameter("cardno");
         HashMap<String, String> data = new HashMap<String, String>();
-        data.put("realname", realName);
-        data.put("cardno", cardno);
-        requestParams.code = code;
-        requestParams.msg = result;
+        data.put("realname", "REALNAME");
+        data.put("cardno", "CARDNO");
+        requestParams.code = "CODE";
+        requestParams.msg = "MSG";
         requestParams.data = data;
         return requestParams;
     }
@@ -143,5 +145,5 @@ public class YZHWebViewClient extends WebViewClient {
 
     public final static String PARSE_PARAMS_TEST_URL = "http://yunzhanghu.com/app/action?code=0&realname=zhangsan&cardno=341226198902121355&result=1";
 
-
+    public final static String LOG_TAG = YZHWebViewClient.class.getSimpleName();
 }
