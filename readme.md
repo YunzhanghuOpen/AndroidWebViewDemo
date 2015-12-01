@@ -2,8 +2,8 @@
 
 # Android WebView 接入云账户
 
-1. library 中 YZHWebViewClient 会收到来自*金融（云账户H5应用）的通知，并根据通知内容做不同的处理。
-1. sample 中演示了接入方法，其中包含：
+1. YZHLibrary 中 YZHWebViewClient 会收到来自*金融（云账户H5应用）的通知，并根据通知内容做不同的处理。
+1. sample 中演示了接入方法，其中L包含：
     * WebView 的设置
     * 模拟接收到云账户通知
     * 处理通知
