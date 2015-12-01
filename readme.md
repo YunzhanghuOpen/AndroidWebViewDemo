@@ -22,6 +22,7 @@ webView.setWebViewClient(new YZHWebViewClient() {
     @Override
     public void returnAuth(WebView view, RequestParams requestParams) {
         Log.d(LOG_TAG, requestParams.toString());
+        //requestParams含义请参考RequestParams.java注释
         //TODO 完成实名认证后 商户App的业务逻辑 注意：该方法运行在非UI线程
     }
 });
