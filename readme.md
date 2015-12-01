@@ -2,8 +2,11 @@
 
 # Android WebView 接入云账户
 
-1. library 中 YZHWebViewClient 会拦截 HTTP 请求找到我们的自定义URL。
-1. sample 中演示了接入云账户的几种不同场景、WebView的相关设置、以及如何使用YZHWebViewClient中的回调方法。
+1. library 中 YZHWebViewClient 会收到来自*金融（云账户H5应用）的通知，并根据通知内容做不同的处理。
+1. sample 中演示了接入方法，其中包含：
+    * WebView 的设置
+    * 模拟接收到云账户通知
+    * 处理通知
 
 ## 使用
 
@@ -28,7 +31,7 @@ webView.loadUrl(Constant.JS_TEST_URL);
 ## 引用library到你的项目
 
 
-library是一个Android library 项目，你可以将它作为一个库引入到你的Eclipse或者Android Studio。
+library 是一个Android library 项目，你可以将它作为一个库引入到你的 Eclipse 或者 Android Studio。
 
 Android Studio中还需要进行如下配置
 
