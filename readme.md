@@ -10,7 +10,7 @@
 
 ## 使用
 
-接入方App实名认证后回调方法的使用:
+商户方根据自己的需要填写业务代码
 
 ```java
 WebView webView = (WebView) findViewById(R.id.js_web_view);
@@ -28,12 +28,9 @@ webView.setWebViewClient(new YZHWebViewClient() {
 webView.loadUrl(Constant.JS_TEST_URL);
 ```
 
-## 引用library到你的项目
+## 引用 library 到你的项目
 
-
-library 是一个Android library 项目，你可以将它作为一个库引入到你的 Eclipse 或者 Android Studio。
-
-Android Studio中还需要进行如下配置
+引用 YZHLibrary 到 Android Studio
 
 In your `build.gradle`:
 
