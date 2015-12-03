@@ -1,5 +1,7 @@
 package com.yunzhanghu.library;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 /**
@@ -20,16 +22,16 @@ public class RequestParams {
      */
     public String msg;
     /**
-     * 商户APP需要获得的数据
+     * 商户APP需要获得的JSON数据
      */
-    public HashMap<String, String> data;
+    public String jsonStr;
 
     @Override
     public String toString() {
         return "RequestParams{" +
                 "code='" + code + '\'' +
                 ", msg='" + msg + '\'' +
-                ", data=" + data +
+                ", data=" + jsonStr +
                 '}';
     }
 }

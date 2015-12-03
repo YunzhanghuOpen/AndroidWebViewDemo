@@ -11,6 +11,8 @@ import android.webkit.WebView;
 import com.yunzhanghu.library.YZHWebViewClient;
 import com.yunzhanghu.library.RequestParams;
 
+import java.util.HashMap;
+
 public class JSActivity extends Activity {
 
     private final static String LOG_TAG = JSActivity.class.getSimpleName();
@@ -36,6 +38,23 @@ public class JSActivity extends Activity {
             public void returnAuth(WebView view, RequestParams requestParams) {
                 Log.d(LOG_TAG, requestParams.toString());
                 //TODO 完成实名认证后 商户App的业务逻辑 注意：该方法运行在非UI线程
+                Log.d(LOG_TAG, requestParams.toString());
+                String code = requestParams.code;
+                String data = requestParams.jsonStr;
+                // LEVEL::INFO code=0 操作成功
+                if (code.equals("0")) {
+                    //TODO 商户填写，自己的后续业务
+                }
+                // LEVEL::WARNING code=1 警告
+                if (code.equals("1")) {
+                    //TODO 商户填写，记录警告内容
+                }
+                // LEVEL::ERROR code=2 错误
+                if (code.equals("2")) {
+                    //TODO 商户填写，异常处理
+                    //关闭*金融
+                    JSActivity.this.finish();
+                }
             }
 
             @Override
@@ -50,7 +69,6 @@ public class JSActivity extends Activity {
                 //TODO 完成投资后 商户App的业务逻辑 注意：该方法运行在非UI线程
             }
         });
-        Log.d(LOG_TAG, Constant.JS_TEST_URL);
         webView.loadUrl(Constant.JS_TEST_URL);
     }
 }

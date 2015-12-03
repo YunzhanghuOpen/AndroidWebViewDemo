@@ -9,9 +9,10 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import org.json.JSONException;
+
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 
 /**
  * Created by max on 15/11/25.
@@ -44,10 +45,18 @@ public class YZHWebViewClient extends WebViewClient {
     public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
         //通过识别自定义的协议来截获请求
         Log.d(LOG_TAG, url);
-        if (url.contains("/returnAuth")) {
-            Uri uri = Uri.parse(PARSE_PARAMS_TEST_URL);
-            returnAuth(view, parseParams(uri));
+        Uri uri = Uri.parse(url);
+        String path = uri.getPath();
+        try {
+            if (path.equals(RETURN_AUTH_PATH)) {
+                returnAuth(view, parseParams(uri));
+            }
+            if (path.equals(RETURN_BANKCARD_PATH)) {
+                returnBankcard(view, parseParams(uri));
+            }
             return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(RESPONSE_MSG.getBytes(StandardCharsets.UTF_8)));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -70,15 +79,22 @@ public class YZHWebViewClient extends WebViewClient {
      * resource itself.
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP) //API 21及以上会调用该方法
-
     @Override
     public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
         Uri uri = request.getUrl();
         //通过识别自定义的协议来截获请求
-        if (uri.getPath().equals("/returnAuth")) {
-            Log.d(LOG_TAG, uri.getPath());
-            returnAuth(view, parseParams(uri));
+        Log.d(LOG_TAG, uri.getPath());
+        String path = uri.getPath();
+        try {
+            if (path.equals(RETURN_AUTH_PATH)) {
+                returnAuth(view, parseParams(uri));
+            }
+            if (path.equals(RETURN_BANKCARD_PATH)) {
+                returnBankcard(view, parseParams(uri));
+            }
             return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(RESPONSE_MSG.getBytes(StandardCharsets.UTF_8)));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -87,21 +103,16 @@ public class YZHWebViewClient extends WebViewClient {
      * 解析请求中携带的参数
      *
      * @param uri 请求资源的Uri
-     * @return Params
+     * @return RequestParams
      */
-    private RequestParams parseParams(Uri uri) {
-        //TODO 待TEST_URL中data修改为JSON格式后使用JSON解析
+    private RequestParams parseParams(Uri uri) throws JSONException {
         RequestParams requestParams = new RequestParams();
-//        String code = uri.getQueryParameter("code");
-//        String result = uri.getQueryParameter("result");
-//        String realName = uri.getQueryParameter("realname");
-//        String cardno = uri.getQueryParameter("cardno");
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.put("realname", "REALNAME");
-        data.put("cardno", "CARDNO");
-        requestParams.code = "CODE";
-        requestParams.msg = "MSG";
-        requestParams.data = data;
+        String code = uri.getQueryParameter(PARAM_KEY_CODE);
+        String msg = uri.getQueryParameter(PARAM_KEY_MSG);
+        String data = uri.getQueryParameter(PARAM_KEY_DATA);
+        requestParams.code = code;
+        requestParams.msg = msg;
+        requestParams.jsonStr = data;
         return requestParams;
     }
 
@@ -135,15 +146,17 @@ public class YZHWebViewClient extends WebViewClient {
     public void returnInvest(WebView view, RequestParams requestParams) {
     }
 
-    public final static String RETURN_AUTH_ACTION = "returnAuth";
+    public final static String RETURN_AUTH_PATH = "/app/returnAuth";
 
-    public final static String RETURN_BANKCARD_ACTION = "returnBankcard";
-
-    public final static String URI_SCHEME = "yzh";
+    public final static String RETURN_BANKCARD_PATH = "/app/returnBankcard";
 
     public final static String RESPONSE_MSG = "app";
 
-    public final static String PARSE_PARAMS_TEST_URL = "http://yunzhanghu.com/app/action?code=0&realname=zhangsan&cardno=341226198902121355&result=1";
+    public final static String PARAM_KEY_CODE = "code";
+
+    public final static String PARAM_KEY_MSG = "msg";
+
+    public final static String PARAM_KEY_DATA = "data";
 
     public final static String LOG_TAG = YZHWebViewClient.class.getSimpleName();
 }

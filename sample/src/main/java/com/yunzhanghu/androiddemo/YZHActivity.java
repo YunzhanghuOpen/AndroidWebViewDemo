@@ -7,8 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import com.yunzhanghu.library.RequestParams;
 import com.yunzhanghu.library.YZHWebViewClient;
@@ -53,8 +51,29 @@ public class YZHActivity extends Activity {
             public void returnAuth(WebView view, RequestParams requestParams) {
                 //TODO 完成实名认证后 商户App的业务逻辑 注意：该方法运行在非UI线程
                 Log.d(LOG_TAG, requestParams.toString());
+                String code = requestParams.code;
+                String data = requestParams.jsonStr;
+                // LEVEL::INFO code=0 操作成功
+                if (code.equals("0")) {
+                    //TODO 商户填写，自己的后续业务
+                }
+                // LEVEL::WARNING code=1 警告
+                if (code.equals("1")) {
+                    //TODO 商户填写，记录警告内容
+                }
+                // LEVEL::ERROR code=2 错误
+                if (code.equals("2")) {
+                    //TODO 商户填写，异常处理
+                    //关闭*金融
+                    YZHActivity.this.finish();
+                }
+            }
+            @Override
+            public void returnBankcard(WebView view, RequestParams requestParams) {
+
             }
         });
+        //实际开发中Constant.YZH_TEST_URL由商户App服务器端生成
         mWebView.loadUrl(Constant.YZH_TEST_URL);
     }
 
