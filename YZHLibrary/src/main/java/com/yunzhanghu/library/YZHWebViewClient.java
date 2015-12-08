@@ -1,6 +1,7 @@
 package com.yunzhanghu.library;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -13,6 +14,7 @@ import org.json.JSONException;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Stack;
 
 /**
  * Created by max on 15/11/25.
@@ -20,6 +22,10 @@ import java.nio.charset.StandardCharsets;
  * 实现WebView与JavaScript的交互.
  */
 public class YZHWebViewClient extends WebViewClient {
+
+    public YZHWebViewClient(Activity activity) {
+        mActivity = activity;
+    }
 
     /**
      * Notify the host application of a resource request and allow the
@@ -47,16 +53,17 @@ public class YZHWebViewClient extends WebViewClient {
         Log.d(LOG_TAG, url);
         Uri uri = Uri.parse(url);
         String path = uri.getPath();
-        try {
-            if (path.equals(RETURN_AUTH_PATH)) {
-                returnAuth(view, parseParams(uri));
-            }
-            if (path.equals(RETURN_BANKCARD_PATH)) {
-                returnBankcard(view, parseParams(uri));
-            }
+        if (path.equals(RETURN_AUTH_PATH)) {
+            returnAuth(view, parseParams(uri));
             return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(RESPONSE_MSG.getBytes(StandardCharsets.UTF_8)));
-        } catch (JSONException e) {
-            e.printStackTrace();
+        }
+        if (path.equals(RETURN_BANKCARD_PATH)) {
+            returnBankcard(view, parseParams(uri));
+            return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(RESPONSE_MSG.getBytes(StandardCharsets.UTF_8)));
+        }
+        if (path.equals(CLOSE_WINDOW_PATH)) {
+            closeWindow(mActivity);
+            return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(RESPONSE_MSG.getBytes(StandardCharsets.UTF_8)));
         }
         return null;
     }
@@ -85,16 +92,17 @@ public class YZHWebViewClient extends WebViewClient {
         //通过识别自定义的协议来截获请求
         Log.d(LOG_TAG, uri.getPath());
         String path = uri.getPath();
-        try {
-            if (path.equals(RETURN_AUTH_PATH)) {
-                returnAuth(view, parseParams(uri));
-            }
-            if (path.equals(RETURN_BANKCARD_PATH)) {
-                returnBankcard(view, parseParams(uri));
-            }
+        if (path.equals(RETURN_AUTH_PATH)) {
+            returnAuth(view, parseParams(uri));
             return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(RESPONSE_MSG.getBytes(StandardCharsets.UTF_8)));
-        } catch (JSONException e) {
-            e.printStackTrace();
+        }
+        if (path.equals(RETURN_BANKCARD_PATH)) {
+            returnBankcard(view, parseParams(uri));
+            return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(RESPONSE_MSG.getBytes(StandardCharsets.UTF_8)));
+        }
+        if (path.equals(CLOSE_WINDOW_PATH)) {
+            closeWindow(mActivity);
+            return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(RESPONSE_MSG.getBytes(StandardCharsets.UTF_8)));
         }
         return null;
     }
@@ -105,7 +113,7 @@ public class YZHWebViewClient extends WebViewClient {
      * @param uri 请求资源的Uri
      * @return RequestParams
      */
-    private RequestParams parseParams(Uri uri) throws JSONException {
+    private RequestParams parseParams(Uri uri) {
         RequestParams requestParams = new RequestParams();
         String code = uri.getQueryParameter(PARAM_KEY_CODE);
         String msg = uri.getQueryParameter(PARAM_KEY_MSG);
@@ -146,9 +154,18 @@ public class YZHWebViewClient extends WebViewClient {
     public void returnInvest(WebView view, RequestParams requestParams) {
     }
 
+
+    private void closeWindow(Activity activity) {
+        activity.finish();
+    }
+
+    private Activity mActivity;
+
     public final static String RETURN_AUTH_PATH = "/app/returnAuth";
 
     public final static String RETURN_BANKCARD_PATH = "/app/returnBankcard";
+
+    public final static String CLOSE_WINDOW_PATH = "/app/closeWindow";
 
     public final static String RESPONSE_MSG = "app";
 
