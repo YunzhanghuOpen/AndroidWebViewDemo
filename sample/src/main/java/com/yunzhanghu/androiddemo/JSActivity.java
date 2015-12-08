@@ -32,14 +32,16 @@ public class JSActivity extends Activity {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setSupportZoom(false);
-        webView.setWebViewClient(new YZHWebViewClient() {
+        webView.setWebViewClient(new YZHWebViewClient(this) {
             //商户App可以根据不同的入口url（即Constant.JS_TEST_URL)）选择实现不同的回调方法来实现自己的业务逻辑
             @Override
             public void returnAuth(WebView view, RequestParams requestParams) {
                 Log.d(LOG_TAG, requestParams.toString());
                 //TODO 完成实名认证后 商户App的业务逻辑 注意：该方法运行在非UI线程
                 Log.d(LOG_TAG, requestParams.toString());
+                //结果码
                 String code = requestParams.code;
+                //商户App需要获得的JSON数据
                 String data = requestParams.jsonStr;
                 // LEVEL::INFO code=0 操作成功
                 if (code.equals("0")) {
@@ -61,12 +63,23 @@ public class JSActivity extends Activity {
             public void returnBankcard(WebView view, RequestParams requestParams) {
                 Log.d(LOG_TAG, requestParams.toString());
                 //TODO 完成绑卡后 商户App的业务逻辑 注意：该方法运行在非UI线程
+                //结果码
+                String code = requestParams.code;
+                //商户App需要获得的JSON数据
+                String data = requestParams.jsonStr;
+                //code 含义与returnAuth方法中相同
+
             }
 
             @Override
             public void returnInvest(WebView view, RequestParams requestParams) {
                 Log.d(LOG_TAG, requestParams.toString());
                 //TODO 完成投资后 商户App的业务逻辑 注意：该方法运行在非UI线程
+                //结果码
+                String code = requestParams.code;
+                //商户App需要获得的JSON数据
+                String data = requestParams.jsonStr;
+                //code 含义与returnAuth方法中相同
             }
         });
         webView.loadUrl(Constant.JS_TEST_URL);

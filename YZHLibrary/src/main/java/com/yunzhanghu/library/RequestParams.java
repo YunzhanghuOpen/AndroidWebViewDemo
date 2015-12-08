@@ -10,7 +10,7 @@ import java.util.HashMap;
  */
 public class RequestParams {
     /**
-     * 错误码
+     * 结果码
      * <p/>
      * code=0 表示操作成功
      * code=1 表示操作失败，请记录

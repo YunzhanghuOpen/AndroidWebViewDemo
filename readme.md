@@ -31,49 +31,56 @@ protected void onCreate(Bundle savedInstanceState) {
     mWebView.getSettings().setJavaScriptEnabled(true);
     //设置WebView缓存模式
     mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-    mWebView.setWebViewClient(new YZHWebViewClient() {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            //保证使用应用内的WebView打开 而不是使用外部浏览器 返回值为true
-            view.loadUrl(url);
-            return true;
-        }
-
-        @Override
-        public void returnAuth(WebView view, RequestParams requestParams) {
-            //TODO 完成实名认证后 商户App的业务逻辑 注意：该方法运行在非UI线程
-            Log.d(LOG_TAG, requestParams.toString());
-            String code = requestParams.code;
-
-            // LEVEL::INFO code=0 操作成功
-            if (code.equals("0")) {
-
-                //TODO 商户填写，自己的后续业务
-                HashMap data = requestParams.data;
-
-                //关闭*金融
-                YZHActivity.this.finish();
+    webView.setWebViewClient(new YZHWebViewClient(this) {
+            //商户App可以根据不同的入口url（即Constant.JS_TEST_URL)）选择实现不同的回调方法来实现自己的业务逻辑
+            @Override
+            public void returnAuth(WebView view, RequestParams requestParams) {
+                Log.d(LOG_TAG, requestParams.toString());
+                //TODO 完成实名认证后 商户App的业务逻辑 注意：该方法运行在非UI线程
+                Log.d(LOG_TAG, requestParams.toString());
+                //结果码
+                String code = requestParams.code;
+                //商户App需要获得的JSON数据
+                String data = requestParams.jsonStr;
+                // LEVEL::INFO code=0 操作成功
+                if (code.equals("0")) {
+                    //TODO 商户填写，自己的后续业务
+                }
+                // LEVEL::WARNING code=1 警告
+                if (code.equals("1")) {
+                    //TODO 商户填写，记录警告内容
+                }
+                // LEVEL::ERROR code=2 错误
+                if (code.equals("2")) {
+                    //TODO 商户填写，异常处理
+                    //关闭*金融
+                    JSActivity.this.finish();
+                }
             }
 
-            // LEVEL::WARNING code=1 警告
-            if (code.equals("1")) {
-                //TODO 商户填写，记录警告内容
+            @Override
+            public void returnBankcard(WebView view, RequestParams requestParams) {
+                Log.d(LOG_TAG, requestParams.toString());
+                //TODO 完成绑卡后 商户App的业务逻辑 注意：该方法运行在非UI线程
+                //结果码
+                String code = requestParams.code;
+                //商户App需要获得的JSON数据
+                String data = requestParams.jsonStr;
+                //code 含义与returnAuth方法中相同
+                
             }
 
-            // LEVEL::ERROR code=2 错误
-            if (code.equals("2")) {
-                //TODO 商户填写，异常处理
-
-                //关闭*金融
-                YZHActivity.this.finish();
+            @Override
+            public void returnInvest(WebView view, RequestParams requestParams) {
+                Log.d(LOG_TAG, requestParams.toString());
+                //TODO 完成投资后 商户App的业务逻辑 注意：该方法运行在非UI线程
+                //结果码
+                String code = requestParams.code;
+                //商户App需要获得的JSON数据
+                String data = requestParams.jsonStr;
+                //code 含义与returnAuth方法中相同
             }
-        }
-
-        @Override
-        public void returnBankcard(WebView view, RequestParams requestParams) {
-
-        }
-    });
+        });
     //实际开发中Constant.YZH_TEST_URL由商户App服务器端生成
     mWebView.loadUrl(Constant.YZH_TEST_URL);
 }
