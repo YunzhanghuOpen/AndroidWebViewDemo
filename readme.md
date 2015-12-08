@@ -16,14 +16,17 @@
 @SuppressLint("SetJavaScriptEnabled")
 @Override
 protected void onCreate(Bundle savedInstanceState) {
+
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_yzh);
+    
     findViewById(R.id.btn_closed).setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             finish();
         }
     });
+
     mWebView = (WebView) findViewById(R.id.yzh_web_view);
     //设置支持Dom存储
     mWebView.getSettings().setDomStorageEnabled(true);
@@ -31,11 +34,13 @@ protected void onCreate(Bundle savedInstanceState) {
     mWebView.getSettings().setJavaScriptEnabled(true);
     //设置WebView缓存模式
     mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+
     webView.setWebViewClient(new YZHWebViewClient(this) {
+
             //商户App可以根据不同的入口url（即Constant.JS_TEST_URL)）选择实现不同的回调方法来实现自己的业务逻辑
             @Override
             public void returnAuth(WebView view, RequestParams requestParams) {
-                Log.d(LOG_TAG, requestParams.toString());
+
                 //TODO 完成实名认证后 商户App的业务逻辑 注意：该方法运行在非UI线程
                 Log.d(LOG_TAG, requestParams.toString());
                 //结果码
@@ -60,6 +65,7 @@ protected void onCreate(Bundle savedInstanceState) {
 
             @Override
             public void returnBankcard(WebView view, RequestParams requestParams) {
+
                 Log.d(LOG_TAG, requestParams.toString());
                 //TODO 完成绑卡后 商户App的业务逻辑 注意：该方法运行在非UI线程
                 //结果码
@@ -72,6 +78,7 @@ protected void onCreate(Bundle savedInstanceState) {
 
             @Override
             public void returnInvest(WebView view, RequestParams requestParams) {
+
                 Log.d(LOG_TAG, requestParams.toString());
                 //TODO 完成投资后 商户App的业务逻辑 注意：该方法运行在非UI线程
                 //结果码
@@ -79,8 +86,10 @@ protected void onCreate(Bundle savedInstanceState) {
                 //商户App需要获得的JSON数据
                 String data = requestParams.jsonStr;
                 //code 含义与returnAuth方法中相同
+
             }
         });
+
     //实际开发中Constant.YZH_TEST_URL由商户App服务器端生成
     mWebView.loadUrl(Constant.YZH_TEST_URL);
 }
@@ -103,13 +112,3 @@ In your `settings.gradle`:
 ```gradle
 include ':library'
 ```
-
-
-
-
-
-
-
-
-
-
