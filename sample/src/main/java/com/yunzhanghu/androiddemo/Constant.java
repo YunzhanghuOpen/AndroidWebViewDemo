@@ -6,7 +6,7 @@ package com.yunzhanghu.androiddemo;
  */
 public class Constant {
 
-    public static final String YZH_TEST_URL = "https://test.yunzhanghu.com/#/app/logout";
+    public static final String YZH_TEST_URL = "https://test.yunzhanghu.com/#/app/mockUsers";
 
     public static final String JS_TEST_URL = "https://test.yunzhanghu.com/js-native-connect-test.html";
 }
