@@ -4,17 +4,15 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import org.json.JSONException;
-
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Stack;
 
 /**
  * Created by max on 15/11/25.
@@ -53,6 +51,9 @@ public class YZHWebViewClient extends WebViewClient {
         Log.d(LOG_TAG, url);
         Uri uri = Uri.parse(url);
         String path = uri.getPath();
+        if (TextUtils.isEmpty(path)) {
+            return null;
+        }
         if (path.equals(RETURN_AUTH_PATH)) {
             returnAuth(view, parseParams(uri));
             return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(RESPONSE_MSG.getBytes(StandardCharsets.UTF_8)));
@@ -85,13 +86,16 @@ public class YZHWebViewClient extends WebViewClient {
      * response information or null if the WebView should load the
      * resource itself.
      */
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP) //API 21及以上会调用该方法
+    @TargetApi(Build.VERSION_CODES.M) //API 21及以上会调用该方法
     @Override
     public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
         Uri uri = request.getUrl();
         //通过识别自定义的协议来截获请求
-        Log.d(LOG_TAG, uri.getPath());
         String path = uri.getPath();
+        if (TextUtils.isEmpty(path)) {
+            return null;
+        }
+        Log.d(LOG_TAG, uri.getPath());
         if (path.equals(RETURN_AUTH_PATH)) {
             returnAuth(view, parseParams(uri));
             return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(RESPONSE_MSG.getBytes(StandardCharsets.UTF_8)));
