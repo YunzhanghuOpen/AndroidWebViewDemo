@@ -13,12 +13,12 @@
         >
 
         <Button
-            android:id="@+id/btn_closed"
+            android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
-            android:text="关闭"
+            android:text="返回"
             android:background="@null"
             android:textColor="@android:color/white"
             />
@@ -27,7 +27,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="***金融"
+            android:text="云账户金融"
+            android:textColor="@android:color/white"
+            />
+            
+        <Button
+            android:id="@+id/btn_closed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:text="关闭"
+            android:background="@null"
             android:textColor="@android:color/white"
             />
     </RelativeLayout>
