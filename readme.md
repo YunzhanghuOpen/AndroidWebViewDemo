@@ -1,4 +1,4 @@
-![yun](https://www.yunzhanghu.com/img/logo.png)
+![yun](http://www.yunzhanghu.com/img/logo.png)
 
 # AndroidWebViewDemo
 
